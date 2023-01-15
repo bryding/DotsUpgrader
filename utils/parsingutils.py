@@ -1,12 +1,19 @@
 import os
 
 def firstSubstring(lines, substr): 
-  index, _ = next((i, s) for i, s in enumerate(lines) if substr in s)
-  return index
+  result = -1
+  for (i, s) in enumerate(lines):
+      if substr in s:
+          result = i
+          break
+  return result
 
 def replaceFirstSubstring(lines, original, new):
-  iComponentDataIndex = firstSubstring(lines, original)
-  lines[iComponentDataIndex] = lines[iComponentDataIndex].replace(original, new)
+  index = firstSubstring(lines, original)
+  if (index == -1):
+    return False
+  lines[index] = lines[index].replace(original, new)
+  return True
 
 def appendStructName(lines, append):
     for i, line in enumerate(lines):

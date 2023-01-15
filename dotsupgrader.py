@@ -48,7 +48,7 @@ def generateAuthoringComponentForFile(filename, subdir, commit):
 
   lines = []
 
-  with open(file) as file:
+  with open(file, encoding='utf8') as file:
     for line in file:
       lines.append(line)
   
@@ -70,7 +70,9 @@ def generateAuthoringComponentForFile(filename, subdir, commit):
   monoLines = lines[struct_begin:struct_end + 1]
 
   appendStructName(monoLines, "Authoring")
-  replaceFirstSubstring(monoLines, 'IComponentData', 'Monobehaviour')
+  if not replaceFirstSubstring(monoLines, 'IComponentData', 'Monobehaviour'):
+    replaceFirstSubstring(monoLines, 'IBufferElementData', 'Monobehaviour')
+  
   replaceFirstSubstring(monoLines, 'struct', 'class')
   monoLines = ["\n"] + monoLines
 
