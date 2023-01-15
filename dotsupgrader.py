@@ -2,30 +2,49 @@ import argparse
 import os
 from utils.parsingutils import *
 
+BAKER_NEEDED = "// Run stage 2 for baker in DotsUpgrade script after ugprading to Entities 1.0\n"
 
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--dir', default="./sandbox/forModify", help="The top level directory containing all of the .cs files that need to be updated.")
     parser.add_argument('--stage', default='1', choices=['1', '2'], help="Select stage 1 to update the file to add the monobehaviour authoring component. After stage 1 is complete, update to Entities 1.0, and then run stage 2 to create the Baker")
+    parser.add_argument('--commit', default='false', choices=['true', 'false'], help="Set to false to merely print out potential results, no files will be changed. True will update the files")
 
     args = parser.parse_args()
+    commit = args.commit == 'true'
 
     if (args.stage == '1'):
-      generateAuthoringMonobehaviours(args.dir)
-    
+      generateAuthoringMonobehaviours(args.dir, commit)
+    else:
+      generateBaker(args.dir, commit)
 
-def generateAuthoringMonobehaviours(rootdir):
+
+def generateBaker(rootdir, commit):
   for subdir, dirs, files in os.walk(rootdir):
     for file in files:
       if file.lower().endswith('.cs'):
-        processFile(file, subdir)
+        generateBakerComponentForFile(file, subdir, commit)
 
-def processFile(filename, subdir):
+def generateBakerComponentForFile(filename, subdir, commit):
   file = os.path.join(subdir, filename).replace("\\","/")
-  if not needsUpgrade(file):
+  if not needsUpgrade(file, BAKER_NEEDED):
     return
   
-  print(f'Processing {filename}')
+  print(f'Generating Baker for file {filename}')
+
+
+def generateAuthoringMonobehaviours(rootdir, commit):
+  for subdir, dirs, files in os.walk(rootdir):
+    for file in files:
+      if file.lower().endswith('.cs'):
+        generateAuthoringComponentForFile(file, subdir, commit)
+
+def generateAuthoringComponentForFile(filename, subdir, commit):
+  file = os.path.join(subdir, filename).replace("\\","/")
+  if not needsUpgrade(file, '[GenerateAuthoringComponent]'):
+    return
+  
+  print(f'Generating authoring monobehavior for file {filename}')
 
   lines = []
 
@@ -56,19 +75,19 @@ def processFile(filename, subdir):
   monoLines = ["\n"] + monoLines
 
   lines = insert_list(lines, monoLines, struct_end + 1, struct_end + 1)
+  lines = [BAKER_NEEDED] + lines
 
-  print(file.name)
-  replace_file_text(file.name, lines)
+  if (commit):
+    replace_file_text(file.name, lines)
+    update_filename(file.name)
+  else:
+    print(*lines, sep='')
 
-  update_filename(file.name)
 
-  print(*lines, sep='')
-
-
-def needsUpgrade(file):
+def needsUpgrade(file, str):
   with open(file) as file:
     for line in file:
-        if '[GenerateAuthoringComponent]' in line:
+        if str in line:
           return True
   return False
 
