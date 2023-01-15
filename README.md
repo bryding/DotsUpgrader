@@ -20,7 +20,7 @@ See the [Official Upgrade Guide](https://docs.unity3d.com/Packages/com.unity.ent
 
   -h, --help            show this help message and exit
 
-  --dir DIR             The top level directory containing all of the .cs files that need to be updated. (default: ./sandbox/forModify)
+  --dir DIR             The top level directory containing all of the .cs files that need to be updated. (default: None)
 
   --stage {1,2}         Select stage 1 to update the file to add the monobehaviour authoring component. After stage 1 is complete, update to Entities 1.0, and then run   
                         stage 2 to create the Baker (default: 1)
@@ -31,3 +31,9 @@ See the [Official Upgrade Guide](https://docs.unity3d.com/Packages/com.unity.ent
 ### Requirements
 
 This script was tested using Python 3.10, other 3.x version should work in theory...
+
+### Gotchas
+
+* UTF is a real mystery to me. There's a bug where the script will insert a U+FEFF character into your files. I tried a few things to fix this but didn't get far. I ended up just using find+replace all in my IDE to get rid of them.
+* This script will behave badly if you have nested structs in your component structs
+* This script assumes 1 component per file

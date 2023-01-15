@@ -6,7 +6,7 @@ BAKER_NEEDED = "// Run stage 2 for baker in DotsUpgrade script after upgrading t
 
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--dir', default="./sandbox/forModify", help="The top level directory containing all of the .cs files that need to be updated.")
+    parser.add_argument('--dir', required="true", help="The top level directory containing all of the .cs files that need to be updated.")
     parser.add_argument('--stage', default='1', choices=['1', '2'], help="Select stage 1 to update the file to add the monobehaviour authoring component. After stage 1 is complete, update to Entities 1.0, and then run stage 2 to create the Baker")
     parser.add_argument('--commit', default='false', choices=['true', 'false'], help="Set to false to merely print out potential results, no files will be changed. True will update the files")
 
