@@ -15,3 +15,7 @@ def appendStructName(lines, append):
                     words[j+1] = words[j+1] + append
                     lines[i] = " ".join(words) + '\n'
                     return
+
+def insert_list(original_list, insert_list, start_index, end_index):
+  original_list[start_index:end_index] = insert_list
+  return original_list

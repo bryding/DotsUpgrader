@@ -10,7 +10,7 @@ def main():
 
     args = parser.parse_args()
 
-    if (args.stage == 1):
+    if (args.stage == '1'):
       generateAuthoringMonobehaviours(args.dir)
     
 
@@ -53,8 +53,9 @@ def processFile(file):
   appendStructName(monoLines, "Authoring")
   replaceFirstSubstring(monoLines, 'IComponentData', 'Monobehaviour')
   replaceFirstSubstring(monoLines, 'struct', 'class')
+  monoLines = ["\n"] + monoLines
 
-  print(*monoLines, sep='')
+  lines = insert_list(lines, monoLines, struct_end + 1, struct_end + 1)
 
   print(*lines, sep='')
 
