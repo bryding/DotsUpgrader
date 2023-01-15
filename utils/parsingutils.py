@@ -37,14 +37,22 @@ def update_filename(file_path):
   directory, file_name = os.path.split(file_path)
   # Split the file name into the name and extension
   name, ext = os.path.splitext(file_name)
+  isMetaFile = '.cs.meta' in file_path
+  if (isMetaFile):
+    name, ext2 = os.path.splitext(name)
+
   # Append "Authoring" to the name
   new_name = name + "Authoring"
   # Join the directory, new name, and extension to create the new file path
-  new_file_path = os.path.join(directory, new_name + ext)
+  if (isMetaFile):
+    new_file_path = os.path.join(directory, new_name + ext2 + ext)
+  else:
+    new_file_path = os.path.join(directory, new_name + ext)
+
   # Rename the file
   os.rename(file_path, new_file_path)
 
 def replace_file_text(file_path, lines_to_insert):
-  with open(file_path, "w") as file:
+  with open(file_path, "w", encoding="utf-8") as file:
     for line in lines_to_insert:
         file.write(line)

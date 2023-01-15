@@ -2,7 +2,7 @@
 
 This tool converts components marked with [GenerateAuthoringComponent] to the new Entities 1.0 format.
 
-See the [Official Upgrade Guide](https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/upgrade-guide.html) for detailed information on upgrading your project from .51 to 1.0.
+See the [Official Upgrade Guide](https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/upgrade-guide.html) for detailed information on upgrading your project from .51 to 1.0. This tool automates the `Remove GenerateAuthoringComponent` section of the official upgrade guide.
 
 ### Example Usage
 

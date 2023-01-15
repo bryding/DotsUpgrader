@@ -2,7 +2,7 @@ import argparse
 import os
 from utils.parsingutils import *
 
-BAKER_NEEDED = "// Run stage 2 for baker in DotsUpgrade script after ugprading to Entities 1.0\n"
+BAKER_NEEDED = "// Run stage 2 for baker in DotsUpgrade script after upgrading to Entities 1.0\n"
 
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -70,18 +70,19 @@ def generateAuthoringComponentForFile(filename, subdir, commit):
   monoLines = lines[struct_begin:struct_end + 1]
 
   appendStructName(monoLines, "Authoring")
-  if not replaceFirstSubstring(monoLines, 'IComponentData', 'Monobehaviour'):
-    replaceFirstSubstring(monoLines, 'IBufferElementData', 'Monobehaviour')
+  if not replaceFirstSubstring(monoLines, 'IComponentData', 'MonoBehaviour'):
+    replaceFirstSubstring(monoLines, 'IBufferElementData', 'MonoBehaviour')
   
   replaceFirstSubstring(monoLines, 'struct', 'class')
   monoLines = ["\n"] + monoLines
 
   lines = insert_list(lines, monoLines, struct_end + 1, struct_end + 1)
-  lines = [BAKER_NEEDED] + lines
+  lines = [BAKER_NEEDED] + ["using UnityEngine;\n"] + lines
 
   if (commit):
     replace_file_text(file.name, lines)
     update_filename(file.name)
+    update_filename(file.name + '.meta')
   else:
     print(*lines, sep='')
 
