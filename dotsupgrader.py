@@ -9,14 +9,17 @@ def main():
     parser.add_argument('--stage', default=1, choices=['1', '2'], help="Select stage 1 to update the file to add the monobehaviour authoring component. After stage 1 is complete, update to Entities 1.0, and then run stage 2 to create the Baker")
 
     args = parser.parse_args()
-    rootdir = args.dir
 
-    for subdir, dirs, files in os.walk(rootdir):
-      for file in files:
-        if file.lower().endswith('.cs'):
-          filename = os.path.join(subdir, file)
-          processFile(filename)
+    if (args.stage == 1):
+      generateAuthoringMonobehaviours(args.dir)
+    
 
+def generateAuthoringMonobehaviours(rootdir):
+  for subdir, dirs, files in os.walk(rootdir):
+    for file in files:
+      if file.lower().endswith('.cs'):
+        filename = os.path.join(subdir, file)
+        processFile(filename)
 
 def processFile(file):
   if not needsUpgrade(file):
