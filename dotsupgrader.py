@@ -5,8 +5,8 @@ from utils.parsingutils import *
 
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--dir', required="true", help="The top level directory containing all of the .cs files that need to be updated.")
-    parser.add_argument('--stage', default=1, choices=['1', '2'], help="Select stage 1 to update the file to add the monobehaviour authoring component. After stage 1 is complete, update to Entities 1.0, and then run stage 2 to create the Baker")
+    parser.add_argument('--dir', default="./sandbox/forModify", help="The top level directory containing all of the .cs files that need to be updated.")
+    parser.add_argument('--stage', default='1', choices=['1', '2'], help="Select stage 1 to update the file to add the monobehaviour authoring component. After stage 1 is complete, update to Entities 1.0, and then run stage 2 to create the Baker")
 
     args = parser.parse_args()
 
@@ -18,14 +18,14 @@ def generateAuthoringMonobehaviours(rootdir):
   for subdir, dirs, files in os.walk(rootdir):
     for file in files:
       if file.lower().endswith('.cs'):
-        filename = os.path.join(subdir, file)
-        processFile(filename)
+        processFile(file, subdir)
 
-def processFile(file):
+def processFile(filename, subdir):
+  file = os.path.join(subdir, filename).replace("\\","/")
   if not needsUpgrade(file):
     return
   
-  print(f'Processing {file}')
+  print(f'Processing {filename}')
 
   lines = []
 
@@ -56,6 +56,11 @@ def processFile(file):
   monoLines = ["\n"] + monoLines
 
   lines = insert_list(lines, monoLines, struct_end + 1, struct_end + 1)
+
+  print(file.name)
+  replace_file_text(file.name, lines)
+
+  update_filename(file.name)
 
   print(*lines, sep='')
 

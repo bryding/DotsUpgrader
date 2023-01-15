@@ -8,7 +8,6 @@
       "program": "${file}",
       "console": "integratedTerminal",
       "args": ["--dir","./sandbox/forModify/"],
-      "justMyCode": true
     }
   ]
 }
