@@ -4,7 +4,14 @@ This tool converts components marked with [GenerateAuthoringComponent] to the ne
 
 See the [Official Upgrade Guide](https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/upgrade-guide.html) for detailed information on upgrading your project from .51 to 1.0. This tool automates the `Remove GenerateAuthoringComponent` section of the official upgrade guide.
 
-### Example Usage
+### Installation
+
+- Requires an Entity .51 project (will probably work for other pre 1.0 versions as well, but was only tested with .51)
+- Requires Python 3.x (tested in 3.10)
+
+### Quick Start
+
+To use this tool simply run the dotsupgrader python with the necessary arguments. Specify the directory you want to convert files in, which stage of the process you want to execute, and if you want to commit the changes.
 
 `python dotsupgrader.py --dir C:/YourGame/Assets/Scripts/EcsComponents --stage 1 --commit true`
 
@@ -28,12 +35,9 @@ See the [Official Upgrade Guide](https://docs.unity3d.com/Packages/com.unity.ent
   --commit {true,false}
                         Set to false to merely print out potential results, no files will be changed. True will update the files (default: false)
 
-### Requirements
-
-This script was tested using Python 3.10, other 3.x version should work in theory...
-
 ### Gotchas
 
 * UTF is a real mystery to me. There's a bug where the script will insert a U+FEFF character into your files. I tried a few things to fix this but didn't get far. I ended up just using find+replace all in my IDE to get rid of them.
 * This script will behave badly if you have nested structs in your component structs
 * This script assumes 1 component per file
+* This script assumes the name of your component is on the same line as the struct keyword
